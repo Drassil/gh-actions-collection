@@ -2,9 +2,7 @@ name: 'action-prepare'
 description: 'Reusable actions for the frontend workflows'
 outputs:
   github_branch:
-    description: 'Github branch name in lowercase'
-  github_branch_id:
-    description: 'Task ID in lowercase'
+    description: 'Github branch name'
 inputs:
   node_version:
     description: 'node version used for the node commands'

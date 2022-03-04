@@ -49,10 +49,10 @@ function getBranchName() {
    */
   if (process.env.GITHUB_REF.startsWith(VALID_REF_PREFIX)) {
     // coming from a manual workflow trigger
-    branchName = `origin/${process.env.GITHUB_REF.replace(VALID_REF_PREFIX, '')}`;
+    branchName = process.env.GITHUB_REF.replace(VALID_REF_PREFIX, '');
   } else {
     // coming from a PR
-    branchName = `origin/${process.env.GITHUB_HEAD_REF}`;
+    branchName = process.env.GITHUB_HEAD_REF;
   }
 
   return branchName;

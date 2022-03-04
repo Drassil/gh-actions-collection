@@ -67,10 +67,7 @@ async function run() {
 
         const branch = getBranchName();
 
-        console.log(branch);
-
-        core.setOutput('github_branch', branch.toLowerCase());
-        core.setOutput('github_branch_id', branch.toLowerCase());
+        core.setOutput('github_branch', branch);
 
         core.exportVariable('COMMIT_SHA', github.context.sha);
         core.exportVariable('PACKAGE_VERSION', packageJson.version);
