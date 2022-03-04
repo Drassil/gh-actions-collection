@@ -42,9 +42,9 @@ console.log(process.env);
 
 console.log(core.getInput('package_json_path'), cwd)
 
-const packagePath = core.getInput('package_json_path') || cwd;
+const packageJsonPath = core.getInput('package_json_path') || `${cwd}/package.json`;
 
-const packageJson = require(`${packagePath}/package.json`);
+const packageJson = require(packageJsonPath);
 
 step('NPM upgrade', () => {
     child_process.execSync(`npm install -g npm@${getNpmVersion()}`, {
