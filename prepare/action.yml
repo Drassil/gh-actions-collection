@@ -31,6 +31,6 @@ runs:
         # needed because of this bug: https://github.com/actions/runner/issues/665
         INPUT_NODE_VERSION: ${{ inputs.node_version }}
         INPUT_NPM_VERSION: ${{ inputs.npm_version }}
-        PACKAGE_JSON_PATH: ${{ inputs.package_json_path }}
+        INPUT_PACKAGE_JSON_PATH: ${{ inputs.package_json_path }}
       run: |
         node "${{ github.action_path }}/index.js"
