@@ -45,7 +45,7 @@ step('Npm action modules install', () => {
 });
 
 // now we can require the action modules
-const { npmVersionCheck } = require('./src/utils');
+const { npmVersionCheck } = require(`${actionPath}/src/utils`);
 const core = require('@actions/core');
 // set new npm dir in pipeline paths
 core.addPath(`${NPM_GLOBAL_DIR}/bin`);
