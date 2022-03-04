@@ -2,7 +2,8 @@ name: Test github actions collection
 on:
   pull_request:
   push:
-    - master
+    branches:
+      - master
 env:
   NODE_VERSION: 16
   NPM_VERSION: 8.5
