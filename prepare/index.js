@@ -66,7 +66,7 @@ async function run() {
         await npmVersionCheck();
 
         const ref = github.context.head_ref || github.context.ref_name;
-        console.log(github.context, ref);
+        console.log(github, ref);
 
         const branch = ref.replace('refs/heads/', '');
         const branch_id = branch.split('/');
