@@ -32,7 +32,7 @@ step('Npm action modules install', () => {
 });
 
 // now we can require the action modules
-const { npmVersionCheck, getNpmVersion } = require(`../src/utils`);
+const { npmVersionCheck, getNpmVersion, getBranchName } = require(`../src/utils`);
 const core = require('@actions/core');
 const github = require('@actions/github');
 // set new npm dir in pipeline paths
@@ -65,14 +65,12 @@ async function run() {
     try {
         await npmVersionCheck();
 
-        const ref = github.context.head_ref || github.context.ref_name;
-        console.log(github, ref);
+        const branch = getBranchName();
 
-        const branch = ref.replace('refs/heads/', '');
-        const branch_id = branch.split('/');
+        console.log(branch);
 
         core.setOutput('github_branch', branch.toLowerCase());
-        core.setOutput('github_branch_id', branch_id[0].toLowerCase());
+        core.setOutput('github_branch_id', branch.toLowerCase());
 
         core.exportVariable('COMMIT_SHA', github.context.sha);
         core.exportVariable('PACKAGE_VERSION', packageJson.version);

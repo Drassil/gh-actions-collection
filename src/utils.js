@@ -38,7 +38,28 @@ function getNpmVersion() {
     return core.getInput('npm_version') || NPM_VERSION
 }
 
+const VALID_REF_PREFIX = 'refs/heads/';
+
+function getBranchName() {
+  let branchName;
+
+  /**
+   * When the workflow is invoked from manual flow, the branch name
+   * is in GITHUB_REF, otherwise, we have to look into GITHUB_BASE_REF
+   */
+  if (process.env.GITHUB_REF.startsWith(VALID_REF_PREFIX)) {
+    // coming from a manual workflow trigger
+    branchName = `origin/${process.env.GITHUB_REF.replace(VALID_REF_PREFIX, '')}`;
+  } else {
+    // coming from a PR
+    branchName = `origin/${process.env.GITHUB_HEAD_REF}`;
+  }
+
+  return branchName;
+}
+
 module.exports = {
   npmVersionCheck,
-  getNpmVersion
+  getNpmVersion,
+  getBranchName
 };
