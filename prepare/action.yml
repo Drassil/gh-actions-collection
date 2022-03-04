@@ -14,6 +14,10 @@ inputs:
     description: 'npm version used for the npm commands'
     required: false
     default: '8.5'
+  package_json_path:
+    description: 'Path of the package.json to retrieve the package version'
+    required: false
+    default: ''
 env:
   NODE_VERSION: 16
 runs:

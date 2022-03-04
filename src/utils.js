@@ -1,9 +1,8 @@
 const child_process = require('child_process');
 const exec = require('@actions/exec');
-const path = require('path');
 const semver = require('semver');
 const { NPM_VERSION, env } = require('./defs');
-
+const core = require('@actions/core');
 const cwd = process.env.GITHUB_WORKSPACE;
 
 /**
@@ -23,9 +22,11 @@ async function npmVersionCheck() {
     .trim();
   await exec.exec('npm --version', [], options);
 
+  const npmVersion = getNpmVersion();
+
   if (
-    !semver.satisfies(npmVersionTest1, `~${NPM_VERSION}`) ||
-    !semver.satisfies(npmVersionTest2, `~${NPM_VERSION}`)
+    !semver.satisfies(npmVersionTest1, `~${npmVersion}`) ||
+    !semver.satisfies(npmVersionTest2, `~${npmVersion}`)
   ) {
     throw new Error(
       `Npm version is ${npmVersionTest1} (on execSync) | ${npmVersionTest2} (on gh exec), it should be at least 7+. Something went wrong with the previous installtion`,
@@ -39,4 +40,5 @@ function getNpmVersion() {
 
 module.exports = {
   npmVersionCheck,
+  getNpmVersion
 };
