@@ -38,6 +38,8 @@ const github = require('@actions/github');
 // set new npm dir in pipeline paths
 core.addPath(`${NPM_GLOBAL_DIR}/bin`);
 
+console.log(core.getInput('package_json_path'), cwd)
+
 const packagePath = core.getInput('package_json_path') || cwd;
 
 const packageJson = require(`${packagePath}/package.json`);
