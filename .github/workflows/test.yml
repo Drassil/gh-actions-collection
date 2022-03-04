@@ -24,5 +24,5 @@ jobs:
         with:
           npm_version: ${{ env.NPM_VERSION }}
           node_version: ${{ env.NODE_VERSION }}
-          package_json_path: ${{ env.GITHUB_WORKSPACE }}/../prepare@fix(pipeline)--second-attempt-to-fix-tests/package.json
+          package_json_path: /home/runner/work/_actions/Drassil/gh-actions-collection/prepare@fix(pipeline)--second-attempt-to-fix-tests/package.json
         uses: Drassil/gh-actions-collection/prepare@fix(pipeline)--second-attempt-to-fix-tests
