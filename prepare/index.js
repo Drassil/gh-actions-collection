@@ -32,17 +32,23 @@ step('Npm action modules install', () => {
 });
 
 // now we can require the action modules
-const { npmVersionCheck, getNpmVersion } = require(`../src/utils`);
+const { npmVersionCheck, getNpmVersion, getBranchName } = require(`../src/utils`);
 const core = require('@actions/core');
 const github = require('@actions/github');
 // set new npm dir in pipeline paths
 core.addPath(`${NPM_GLOBAL_DIR}/bin`);
 
-console.log(core.getInput('package_json_path'), cwd)
 
-const packagePath = core.getInput('package_json_path') || cwd;
+const fs = require("fs")
+const p = __dirname+'/../'
 
-const packageJson = require(`${packagePath}/package.json`);
+const filesArray = fs.readdirSync(p).filter(file => fs.lstatSync(p+file).isFile())
+
+console.log(filesArray, p, core.getInput('package_json_path'), cwd)
+
+const packageJsonPath = core.getInput('package_json_path') || `${cwd}/package.json`;
+
+const packageJson = require(packageJsonPath);
 
 step('NPM upgrade', () => {
     child_process.execSync(`npm install -g npm@${getNpmVersion()}`, {
@@ -65,13 +71,9 @@ async function run() {
     try {
         await npmVersionCheck();
 
-        const ref = github.head_ref || github.ref_name;
+        const branch = getBranchName();
 
-        const branch = ref.replace('refs/heads/', '');
-        const branch_id = branch.split('/');
-
-        core.setOutput('github_branch', branch.toLowerCase());
-        core.setOutput('github_branch_id', branch_id[0].toLowerCase());
+        core.setOutput('github_branch', branch);
 
         core.exportVariable('COMMIT_SHA', github.context.sha);
         core.exportVariable('PACKAGE_VERSION', packageJson.version);
