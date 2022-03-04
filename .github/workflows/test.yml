@@ -1,0 +1,17 @@
+name: Test github actions collection
+on:
+  pull_request:
+  push:
+env:
+  NODE_VERSION: 16
+  NPM_VERSION: 8.5
+jobs:
+  test:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test prepare action
+        with:
+          npm_version: ${{ env.NPM_VERSION }}
+          node_version: ${{ env.NODE_VERSION }}
+        uses: ./prepare
