@@ -14,16 +14,16 @@ inputs:
     description: 'npm version used for the npm commands'
     required: false
     default: '8.5'
+env:
+  NODE_VERSION: 16
 runs:
   using: 'composite'
-  env:
-    NODE_VERSION: 16
   steps:
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ github.event.inputs.node_version }}
-      - name: Prepare
-        shell: bash
-        run: |
-          node "${{ github.action_path }}/index.js"
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ github.event.inputs.node_version }}
+    - name: Prepare
+      shell: bash
+      run: |
+        node "${{ github.action_path }}/index.js"
