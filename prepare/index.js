@@ -1,16 +1,10 @@
-const path = require('path');
 const child_process = require('child_process');
 
-const actionPath = path.join(__dirname, `../`)
+const { step } = require(`../src/helpers`);
+const { NPM_GLOBAL_DIR, env } = require(`../src/defs`);
 
-const { step } = require(`${actionPath}/src/helpers`);
-const { NPM_GLOBAL_DIR, NPM_VERSION, env } = require(`${actionPath}/src/defs`);
-
-
+const actionRootDir = `${__dirname}/../`;
 const cwd = process.env.GITHUB_WORKSPACE;
-
-const packageJson = require(`${cwd}/package.json`);
-
 
 /**
  * Installing action dependencies before executing any actions
@@ -28,28 +22,32 @@ step('NPM Dir change', () => {
     child_process.execSync(`echo "${NPM_GLOBAL_DIR}/bin" >> $GITHUB_PATH`);
 });
 
-step('NPM upgrade', () => {
-    child_process.execSync(`npm install -g npm@${NPM_VERSION}`, {
-        stdio: [0, 1, 2],
-        cwd,
-    });
-});
-
 // make sure that node_modules are installed
 step('Npm action modules install', () => {
     child_process.execSync('npm install', {
         stdio: [0, 1, 2],
-        cwd: __dirname,
+        cwd: actionRootDir,
         env,
     });
 });
 
 // now we can require the action modules
-const { npmVersionCheck } = require(`${actionPath}/src/utils`);
+const { npmVersionCheck, getNpmVersion } = require(`../src/utils`);
 const core = require('@actions/core');
 const github = require('@actions/github');
 // set new npm dir in pipeline paths
 core.addPath(`${NPM_GLOBAL_DIR}/bin`);
+
+const packagePath = core.getInput('package_json_path') || cwd;
+
+const packageJson = require(`${packagePath}/package.json`);
+
+step('NPM upgrade', () => {
+    child_process.execSync(`npm install -g npm@${getNpmVersion()}`, {
+        stdio: [0, 1, 2],
+        cwd,
+    });
+});
 
 /**
  *

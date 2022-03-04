@@ -24,4 +24,5 @@ jobs:
         with:
           npm_version: ${{ env.NPM_VERSION }}
           node_version: ${{ env.NODE_VERSION }}
+          package_json_path: "$GITHUB_WORKSPACE/../fix-pipeline/package.json"
         uses: Drassil/gh-actions-collection/prepare@fix-pipeline
