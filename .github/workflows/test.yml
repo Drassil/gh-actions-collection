@@ -22,4 +22,4 @@ jobs:
         with:
           npm_version: ${{ env.NPM_VERSION }}
           node_version: ${{ env.NODE_VERSION }}
-        uses: ${{ github.event.repository.full_name }}/prepare@${{ github.head_ref || github.ref_name }} 
+        uses: Drassil/gh-actions-collection/prepare@fix-pipeline
