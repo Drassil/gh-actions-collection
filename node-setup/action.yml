@@ -59,8 +59,6 @@ runs:
 
     - name: Install modules
       shell: bash
-      env:
-        INPUT_INSTALL_COMMAND: ${{ inputs.install_command }}
       run: |
-        cd ${{ env.GITHUB_WORKSPACE }}
-        npm ${{ env.INPUT_INSTALL_COMMAND }}
+        cd ${{ github.workspace }} 
+        npm ${{ inputs.install_command }}
