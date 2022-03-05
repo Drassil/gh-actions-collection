@@ -8,7 +8,7 @@ env:
   NODE_VERSION: 16
   NPM_VERSION: 8.5
 jobs:
-  test-local-usage:
+  test-extra-info-local-usage:
     runs-on: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
@@ -17,7 +17,8 @@ jobs:
           npm_version: ${{ env.NPM_VERSION }}
           node_version: ${{ env.NODE_VERSION }}
         uses: ./extra-info
-  test-remote-usage:
+
+  test-extra-info-remote-usage:
     runs-on: [ubuntu-latest]
     steps:
       - name: Test extra-info action
@@ -26,3 +27,15 @@ jobs:
           node_version: ${{ env.NODE_VERSION }}
           package_json_path: ../package.json
         uses: Drassil/gh-actions-collection/extra-info@master
+
+  test-node-setup:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test node-setup action
+        with:
+          npm_version: ${{ env.NPM_VERSION }}
+          node_version: ${{ env.NODE_VERSION }}
+          project_id: 'test-node-setup'
+          install_command: 'i'
+        uses: ./node-setup
