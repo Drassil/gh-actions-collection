@@ -58,8 +58,19 @@ function getBranchName() {
   return branchName;
 }
 
+/**
+ *
+ * @param {Error} error
+ */
+ function setFailed(error) {
+  console.log(error.message, error.stack);
+  core.setFailed(error.message);
+}
+
+
 module.exports = {
   npmVersionCheck,
   getNpmVersion,
-  getBranchName
+  getBranchName,
+  setFailed
 };
