@@ -18,8 +18,6 @@ inputs:
     description: 'Path of the package.json to retrieve the package version'
     required: false
     default: ''
-env:
-  NODE_VERSION: 16
 runs:
   using: 'composite'
   steps:
