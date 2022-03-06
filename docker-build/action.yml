@@ -9,26 +9,58 @@ inputs:
   user_name:
     description: 'Name of the git user to push the changes'
     required: true
-  user_email:
-    description: 'Email of the git user to push the changes'
+  publish_token:
+    description: 'Token to publish docker images on github'
     required: true
-  node_version:
-    description: 'node version used for the node commands'
-    required: false
-    default: '16'
-  npm_version:
-    description: 'npm version used for the npm commands'
-    required: false
-    default: '8.5'
 runs:
   using: 'composite'
-  env:
-    NODE_VERSION: 16
   steps:
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
         with:
-          node-version: ${{ github.event.inputs.node_version }}
-      - name: Checkout
-        uses: actions/checkout@v2
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.PUBLISH_TOKEN }}
+
+      - name: Pull image for cache
+        env:
+          IMAGE_TAG: ${{ env.PROJECT_ID }}-latest
+        run: docker pull ghcr.io/bitvavo/frontend-manage-panel-next/${{ env.PROJECT_ID }}:dev-latest|| true
+  
+      - name: Build image for Github
+        env:
+          IMAGE_TAG_VERSION: ${{ env.CORE_API_VERSION}}
+          IMAGE_TAG_LATEST: ${{ steps.bitvavo.outputs.github_branch_id }}-latest
+          REACT_APP_ENVIRONMENT: 'dev'
+          REACT_APP_MANAGE_PANEL_V3_ENDPOINT: 'https://account.vavo.dev/connect-v3/graphql'
+          REACT_APP_MANAGE_PANEL_V2_ENDPOINT: 'https://account.vavo.dev/admin-wgnqlla17rbdbi8naednt26z9wzkbq7tnsoqf6a7'
+          REACT_APP_CAPATCHA_KEY: '${{ secrets.DEV_CAPATCHA_KEY }}'
+          REACT_APP_NPM_TOKEN: '${{ secrets.FRANE_PAT }}'
+        run: |
+          docker build \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            --build-arg DOCKER_ENV=${{ env.DOCKER_ENV}} \
+            --build-arg GITHUB_TOKEN=${{ secrets.PUBLISH_TOKEN }} \
+            --build-arg APP_ID=${{ env.PROJECT_ID }} \
+            --build-arg COMMIT_SHA=${{ env.COMMIT_SHA }} \
+            --cache-from=ghcr.io/bitvavo/frontend-manage-panel-next/${{ env.PROJECT_ID }}:dev-latest \
+            --target distribution \
+            -t ghcr.io/bitvavo/frontend-manage-panel-next/${{ env.PROJECT_ID }}:${{ env.IMAGE_TAG_LATEST }} \
+            -t ghcr.io/bitvavo/frontend-manage-panel-next/${{ env.PROJECT_ID }}:${{ env.IMAGE_TAG_VERSION }} .
+
+      - name: Deploy image to Github
+        env:
+          IMAGE_TAG: ${{ env.PROJECT_ID }}-latest
+        if: steps.bitvavo.outputs.github_stage != 'other' # deploy only for dev, qa and prod
+        run: |
+          docker push --all-tags ghcr.io/bitvavo/frontend-manage-panel-next/${{ env.PROJECT_ID }}
+
+      - name: Send message to Slack API
+        uses: archive/github-actions-slack@v1.0.3
+        id: notify
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN }}
+          slack-channel: frontend-deployments
+          slack-text: "@here The Frontend Manage Panel DEV environment has been updated! View it here https://account.vavo.dev/pax/amsterdam/ and view the repo here https://github.com/bitvavo/frontend-manage-panel-next"
+
 

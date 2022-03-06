@@ -32,14 +32,14 @@ runs:
     - name: Preparation
       uses: Drassil/gh-actions-collection/extra-info@master
       with:
-        npm_version: ${{ github.event.inputs.npm_version }}
-        node_version: ${{ github.event.inputs.node_version }}
-        package_json_path: ${{ github.event.inputs.package_json_path }}
+        npm_version: ${{ inputs.npm_version }}
+        node_version: ${{ inputs.node_version }}
+        package_json_path: ${{ inputs.package_json_path }}
 
     - name: Cache global npm
       uses: actions/cache@v2
       env:
-        cache-name: cache-${{ github.event.inputs.project_id }}-global-node-modules
+        cache-name: cache-${{ inputs.project_id }}-global-node-modules
       with:
         # npm cache files are stored in `~/.npm` on Linux/macOS
         path: ~/.npm
@@ -52,7 +52,7 @@ runs:
     - name: Cache local node_modules
       uses: actions/cache@v2
       env:
-        cache-name: cache-${{ github.event.inputs.project_id }}-modules
+        cache-name: cache-${{ inputs.project_id }}-modules
       with:
         path: ${{ env.GITHUB_WORKSPACE }}/node_modules
         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}

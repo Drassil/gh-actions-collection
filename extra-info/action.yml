@@ -24,7 +24,7 @@ runs:
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ github.event.inputs.node_version }}
+        node-version: ${{ inputs.node_version }}
     - name: Prepare
       shell: bash
       env:
