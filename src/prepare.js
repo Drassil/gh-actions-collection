@@ -26,7 +26,7 @@ module.exports = async function () {
 
   // make sure that node_modules are installed
   step('Npm action modules install', () => {
-    child_process.execSync('npm install', {
+    child_process.execSync('npm install --production', {
       stdio: [0, 1, 2],
       cwd: actionRootDir,
       env,
