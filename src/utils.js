@@ -35,7 +35,7 @@ async function npmVersionCheck() {
 }
 
 function getNpmVersion() {
-    return core.getInput('npm_version') || NPM_VERSION
+  return core.getInput('npm_version') || NPM_VERSION
 }
 
 const VALID_REF_PREFIX = 'refs/heads/';
@@ -62,7 +62,7 @@ function getBranchName() {
  *
  * @param {Error} error
  */
- function setFailed(error) {
+function setFailed(error) {
   console.log(error.message, error.stack);
   core.setFailed(error.message);
 }
