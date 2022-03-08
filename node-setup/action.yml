@@ -38,6 +38,7 @@ runs:
         package_json_path: ${{ inputs.package_json_path }}
 
     - name: Set outputs
+      shell: bash
       run: |
         echo '::set-output name=github_branch::${{ steps.preparation.outputs.github_branch }}'
         echo '::set-output name=package_version::${{ steps.preparation.outputs.package_version }}'
