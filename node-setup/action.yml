@@ -31,10 +31,16 @@ runs:
   steps:
     - name: Preparation
       uses: Drassil/gh-actions-collection/extra-info@master
+      id: preparation
       with:
         npm_version: ${{ inputs.npm_version }}
         node_version: ${{ inputs.node_version }}
         package_json_path: ${{ inputs.package_json_path }}
+
+    - name: Set outputs
+      run: |
+        echo '::set-output name=github_branch::${{ steps.preparation.outputs.github_branch }}'
+        echo '::set-output name=package_version::${{ steps.preparation.outputs.package_version }}'
 
     - name: Cache global npm
       uses: actions/cache@v2

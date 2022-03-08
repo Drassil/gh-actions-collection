@@ -17,6 +17,7 @@ async function run() {
     const branch = getBranchName();
 
     core.setOutput('github_branch', branch);
+    core.exportVariable('GITHUB_BRANCH', branch);
 
     core.setOutput('package_version', packageJson.version);
     core.exportVariable('PACKAGE_VERSION', packageJson.version);

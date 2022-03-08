@@ -1,16 +1,16 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es6",
-        "strict": true,
-        "strictNullChecks": true,
-        "noUnusedParameters": true,
-        "noImplicitReturns": true,
-    },
-    "exclude": [
-        "**/node_modules"
-    ],
-    "include": [
-        "**/*.js"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "strict": true,
+    "strictNullChecks": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+  },
+  "exclude": [
+    "**/node_modules"
+  ],
+  "include": [
+    "**/*.js"
+  ]
 }

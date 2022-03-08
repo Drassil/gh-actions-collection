@@ -1,19 +1,19 @@
 {
-    "name": "@drassil/gh-actions-collection",
-    "version": "1.0.0",
-    "description": "Github action collection by Drassil",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "",
-    "license": "MIT",
-    "dependencies": {
-        "@actions/core": "^1.4.0",
-        "@actions/exec": "^1.1.0",
-        "@actions/github": "^5.0.0",
-        "semver": "^7.3.5"
-    },
-    "devDependencies": {
-        "eslint": "^8.10.0"
-    }
+  "name": "@drassil/gh-actions-collection",
+  "version": "1.0.0",
+  "description": "Github action collection by Drassil",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.4.0",
+    "@actions/exec": "^1.1.0",
+    "@actions/github": "^5.0.0",
+    "semver": "^7.3.5"
+  },
+  "devDependencies": {
+    "eslint": "^8.10.0"
+  }
 }
