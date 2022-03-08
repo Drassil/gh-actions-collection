@@ -3,8 +3,10 @@ description: 'It injects in your pipeline extra info that can be used by your wo
 outputs:
   github_branch:
     description: 'Github branch name'
+    value: ${{ steps.prepare.outputs.github_branch }}
   package_version:
     description: 'The package version of the repository. PACKAGE_VERSION env variable is also exported.'
+    value: ${{ steps.prepare.outputs.package_version }}
 inputs:
   node_version:
     description: 'node version used for the node commands'
@@ -27,6 +29,7 @@ runs:
         node-version: ${{ inputs.node_version }}
     - name: Prepare
       shell: bash
+      id: prepare
       env:
         # needed because of this bug: https://github.com/actions/runner/issues/665
         INPUT_NODE_VERSION: ${{ inputs.node_version }}
