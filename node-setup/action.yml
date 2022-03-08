@@ -3,8 +3,10 @@ description: 'It install your npm modules with cache support and injects in your
 outputs:
   github_branch:
     description: 'Github branch name'
+    value: ${{ steps.prepare.outputs.github_branch }}
   package_version:
     description: 'The package version of the repository. PACKAGE_VERSION env variable is also exported.'
+    value: ${{ steps.prepare.outputs.package_version }}
 inputs:
   node_version:
     description: 'node version used for the node commands'
@@ -31,17 +33,11 @@ runs:
   steps:
     - name: Preparation
       uses: Drassil/gh-actions-collection/extra-info@master
-      id: preparation
+      id: prepare
       with:
         npm_version: ${{ inputs.npm_version }}
         node_version: ${{ inputs.node_version }}
         package_json_path: ${{ inputs.package_json_path }}
-
-    - name: Set outputs
-      shell: bash
-      run: |
-        echo '::set-output name=github_branch::${{ steps.preparation.outputs.github_branch }}'
-        echo '::set-output name=package_version::${{ steps.preparation.outputs.package_version }}'
 
     - name: Cache global npm
       uses: actions/cache@v2
