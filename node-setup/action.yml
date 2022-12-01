@@ -16,8 +16,12 @@ inputs:
     description: 'npm version used for the npm commands'
     required: falses
     default: '8.5'
-  package_json_path:
-    description: 'Path of the package.json to retrieve the package version'
+  package_json_file:
+    description: 'File name of the package.json where to retrieve the package version'
+    required: false
+    default: 'package.json'
+  package_json_dir:
+    description: 'Directory of the package.json where to retrieve the package version'
     required: false
     default: ''
   project_id:
@@ -30,6 +34,8 @@ inputs:
     default: 'install'
 runs:
   using: 'composite'
+  env:
+    NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}
   steps:
     - name: Preparation
       uses: Drassil/gh-actions-collection/extra-info@master
@@ -37,7 +43,7 @@ runs:
       with:
         npm_version: ${{ inputs.npm_version }}
         node_version: ${{ inputs.node_version }}
-        package_json_path: ${{ inputs.package_json_path }}
+        package_json_path: ${{ env.NODE_MODULE_DIR }}/${{ inputs.package_json_file }}
 
     - name: Cache global npm
       uses: actions/cache@v2
@@ -46,7 +52,7 @@ runs:
       with:
         # npm cache files are stored in `~/.npm` on Linux/macOS
         path: ~/.npm
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(${{ env.NODE_MODULE_DIR }}'/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-build-${{ env.cache-name }}-
           ${{ runner.os }}-build-
@@ -57,11 +63,11 @@ runs:
       env:
         cache-name: cache-${{ inputs.project_id }}-modules
       with:
-        path: ${{ env.GITHUB_WORKSPACE }}/node_modules
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        path: ${{ env.NODE_MODULE_DIR }}/node_modules
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(${{ env.NODE_MODULE_DIR }}'/package-lock.json') }}
 
     - name: Install modules
       shell: bash
       run: |
-        cd ${{ github.workspace }} 
+        cd ${{ inputs.package_json_dir }}
         npm ${{ inputs.install_command }}
