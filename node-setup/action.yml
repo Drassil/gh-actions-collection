@@ -34,10 +34,10 @@ inputs:
     default: 'install'
 runs:
   using: 'composite'
-  env:
-    NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}
   steps:
     - name: Preparation
+      env:
+        NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}
       uses: Drassil/gh-actions-collection/extra-info@master
       id: prepare
       with:
@@ -49,6 +49,7 @@ runs:
       uses: actions/cache@v2
       env:
         cache-name: cache-${{ inputs.project_id }}-global-node-modules
+        NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}
       with:
         # npm cache files are stored in `~/.npm` on Linux/macOS
         path: ~/.npm
@@ -62,12 +63,15 @@ runs:
       uses: actions/cache@v2
       env:
         cache-name: cache-${{ inputs.project_id }}-modules
+        NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}
       with:
         path: ${{ env.NODE_MODULE_DIR }}/node_modules
         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(${{ env.NODE_MODULE_DIR }}'/package-lock.json') }}
 
     - name: Install modules
       shell: bash
+      env:
+        NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}
       run: |
-        cd ${{ inputs.package_json_dir }}
+        cd ${{ env.NODE_MODULE_DIR }}
         npm ${{ inputs.install_command }}
