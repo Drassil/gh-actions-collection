@@ -53,7 +53,7 @@ runs:
       with:
         # npm cache files are stored in `~/.npm` on Linux/macOS
         path: ~/.npm
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(${{ env.NODE_MODULE_DIR }}'/package-lock.json') }}
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(format('{0}/package-lock.json', env.NODE_MODULE_DIR )) }}
         restore-keys: |
           ${{ runner.os }}-build-${{ env.cache-name }}-
           ${{ runner.os }}-build-
@@ -65,9 +65,8 @@ runs:
         cache-name: cache-${{ inputs.project_id }}-modules
         NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}
       with:
-        path: ${{ env.NODE_MODULE_DIR }}/node_modules
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(${{ env.NODE_MODULE_DIR }}'/package-lock.json') }}
-
+        path: ${{ env.NODE_MODULE_DIR }}/node_modules        
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(format('{0}/package-lock.json', env.NODE_MODULE_DIR )) }}
     - name: Install modules
       shell: bash
       env:
