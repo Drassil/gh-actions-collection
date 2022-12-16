@@ -46,7 +46,7 @@ runs:
         package_json_path: ${{ env.NODE_MODULE_DIR }}/${{ inputs.package_json_file }}
 
     - name: Cache global npm
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       env:
         cache-name: cache-${{ inputs.project_id }}-global-node-modules
         NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}
@@ -60,7 +60,7 @@ runs:
           ${{ runner.os }}-
 
     - name: Cache local node_modules
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       env:
         cache-name: cache-${{ inputs.project_id }}-modules
         NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}

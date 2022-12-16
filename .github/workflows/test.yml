@@ -11,7 +11,7 @@ jobs:
   test-extra-info-local-usage:
     runs-on: [ubuntu-latest]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Test extra-info action
         with:
           npm_version: ${{ env.NPM_VERSION }}
@@ -31,7 +31,7 @@ jobs:
   test-node-setup:
     runs-on: [ubuntu-latest]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Test node-setup action
         with:
           npm_version: ${{ env.NPM_VERSION }}
