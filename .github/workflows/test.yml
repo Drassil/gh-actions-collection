@@ -43,7 +43,7 @@ jobs:
   test-node-setup-default-values:
     runs-on: [ubuntu-latest]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Test node-setup action
         with:
           project_id: 'test-node-setup'
