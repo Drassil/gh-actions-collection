@@ -38,13 +38,17 @@ module.exports = async function () {
   // set new npm dir in pipeline paths
   core.addPath(`${NPM_GLOBAL_DIR}/bin`);
 
-  step('NPM upgrade', () => {
-    child_process.execSync(`npm install -g npm@${getNpmVersion()}`, {
-      stdio: [0, 1, 2],
-      cwd,
+  const npmVersion = getNpmVersion();
+  if (npmVersion) {
+    step('NPM upgrade', () => {
+      child_process.execSync(`npm install -g npm@${getNpmVersion()}`, {
+        stdio: [0, 1, 2],
+        cwd,
+      });
     });
-  });
 
-  await npmVersionCheck();
+    await npmVersionCheck();
+  }
+
 
 }

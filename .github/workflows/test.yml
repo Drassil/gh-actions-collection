@@ -37,5 +37,14 @@ jobs:
           npm_version: ${{ env.NPM_VERSION }}
           node_version: ${{ env.NODE_VERSION }}
           project_id: 'test-node-setup'
-          install_command: 'i'
+          install_command: 'ci'
+        uses: ./node-setup
+  
+  test-node-setup-default-values:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test node-setup action
+        with:
+          project_id: 'test-node-setup'
         uses: ./node-setup

@@ -11,11 +11,11 @@ inputs:
   node_version:
     description: 'node version used for the node commands'
     required: false
-    default: '16'
+    default: 'lts/*'
   npm_version:
     description: 'npm version used for the npm commands'
-    required: falses
-    default: '8.5'
+    required: false
+    default: ''
   package_json_file:
     description: 'File name of the package.json where to retrieve the package version'
     required: false
