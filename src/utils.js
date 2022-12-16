@@ -1,7 +1,7 @@
 const child_process = require('child_process');
 const exec = require('@actions/exec');
 const semver = require('semver');
-const { NPM_VERSION, env } = require('./defs');
+const { env } = require('./defs');
 const core = require('@actions/core');
 const cwd = process.env.GITHUB_WORKSPACE;
 
@@ -35,7 +35,7 @@ async function npmVersionCheck() {
 }
 
 function getNpmVersion() {
-  return core.getInput('npm_version') || NPM_VERSION
+  return core.getInput('npm_version')
 }
 
 const VALID_REF_PREFIX = 'refs/heads/';
