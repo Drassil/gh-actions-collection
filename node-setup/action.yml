@@ -74,6 +74,6 @@ runs:
       run: |
         cd ${{ env.NODE_MODULE_DIR }}
         echo "Count cached packages"
-        npm ls --parseable | wc -l
+        ls node_modules | wc -l
         cd ${{ env.NODE_MODULE_DIR }}
         npm ${{ inputs.install_command }}
