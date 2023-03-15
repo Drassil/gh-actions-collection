@@ -32,6 +32,11 @@ inputs:
     description: 'NPM install command. default: install'
     required: false
     default: 'install'
+  cache_npm_modules:
+    description: 'Enable/disable caching of the local node_modules folder'
+    required: false
+    default: false
+    type: boolean
 runs:
   using: 'composite'
   steps:
@@ -61,6 +66,7 @@ runs:
 
     - name: Cache local node_modules
       uses: actions/cache@v3
+      if: ${{ inputs.cache_npm_modules }}
       env:
         cache-name: cache-${{ inputs.project_id }}-modules
         NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}
