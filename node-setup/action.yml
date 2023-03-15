@@ -32,7 +32,7 @@ inputs:
     description: 'NPM install command. default: install'
     required: false
     default: 'install'
-  skip_cache_npm_modules:
+  cache_npm_modules:
     description: 'Enable/disable caching of the local node_modules folder'
     required: false
     default: true
