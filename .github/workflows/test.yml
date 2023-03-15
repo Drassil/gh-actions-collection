@@ -38,7 +38,7 @@ jobs:
           node_version: ${{ env.NODE_VERSION }}
           project_id: 'test-node-setup'
           install_command: 'ci'
-          cache_npm_modules: true
+          skip_cache_npm_modules: false
         uses: ./node-setup
   
   test-node-setup-default-values:
