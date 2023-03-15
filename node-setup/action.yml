@@ -35,7 +35,6 @@ inputs:
   cache_npm_modules:
     description: 'Enable/disable caching of the local node_modules folder'
     required: false
-    default: true
     type: boolean
 runs:
   using: 'composite'
@@ -66,7 +65,7 @@ runs:
 
     - name: Cache local node_modules
       uses: actions/cache@v3
-      if: ( !inputs.skip_cache_npm_modules )
+      if: ( inputs.cache_npm_modules )
       env:
         cache-name: cache-${{ inputs.project_id }}-modules
         NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}
