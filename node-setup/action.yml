@@ -29,9 +29,9 @@ inputs:
     required: false
     default: 'default'
   install_command:
-    description: 'NPM install command. default: install'
+    description: 'install command. default: npm install'
     required: false
-    default: 'install'
+    default: 'npm install'
   cache_npm_modules:
     description: 'Enable/disable caching of the local node_modules folder'
     required: false
@@ -83,4 +83,4 @@ runs:
         mkdir -p node_modules
         ls node_modules | wc -l
         cd ${{ env.NODE_MODULE_DIR }}
-        npm ${{ inputs.install_command }}
+        ${{ inputs.install_command }}
