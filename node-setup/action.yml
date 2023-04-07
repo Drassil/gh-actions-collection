@@ -40,7 +40,6 @@ inputs:
     description: 'Enable/disable caching of the global node_modules folder'
     required: false
     type: boolean
-    default: false
 runs:
   using: 'composite'
   steps:
