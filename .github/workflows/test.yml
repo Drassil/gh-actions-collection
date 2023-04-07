@@ -17,6 +17,7 @@ jobs:
           npm_version: ${{ env.NPM_VERSION }}
           node_version: ${{ env.NODE_VERSION }}
           install_command: 'npm ci'
+          cache_global_modules: false
         uses: ./extra-info
 
   test-extra-info-remote-usage:
@@ -28,6 +29,7 @@ jobs:
           node_version: ${{ env.NODE_VERSION }}
           package_json_path: ../package.json
           install_command: 'npm ci'
+          cache_global_modules: false
         uses: Drassil/gh-actions-collection/extra-info@master
 
   test-node-setup:
@@ -41,6 +43,7 @@ jobs:
           project_id: 'test-node-setup'
           install_command: 'npm install'
           cache_npm_modules: true
+          cache_global_modules: false
         uses: ./node-setup
   
   test-node-setup-default-values:
