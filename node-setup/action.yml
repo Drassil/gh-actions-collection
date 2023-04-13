@@ -32,6 +32,10 @@ inputs:
     description: 'install command. default: npm install'
     required: false
     default: 'npm install'
+  cache_command:
+    description: 'Command to run if `cache_npm_modules: true` and cache hits'
+    required: false
+    default: 'npm ls --parseable | wc -l'
   cache_npm_modules:
     description: 'Enable/disable caching of the local node_modules folder'
     required: false
@@ -78,7 +82,7 @@ runs:
       with:
         path: ${{ env.NODE_MODULE_DIR }}/node_modules        
         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(format('{0}/package-lock.json', env.NODE_MODULE_DIR )) }}
-
+    # If cache doesn't hit
     - name: Install modules
       shell: bash
       if: steps.local-cache.outputs.cache-hit != 'true'
@@ -86,8 +90,13 @@ runs:
         NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}
       run: |
         cd ${{ env.NODE_MODULE_DIR }}
-        echo "Count cached packages"
-        mkdir -p node_modules
-        ls node_modules | wc -l
-        cd ${{ env.NODE_MODULE_DIR }}
         ${{ inputs.install_command }}
+    # else
+    - name: Else alternative install
+      shell: bash
+      if: steps.local-cache.outputs.cache-hit == 'true'
+      env:
+        NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}
+      run: |
+        cd ${{ env.NODE_MODULE_DIR }}
+        ${{ inputs.cache_command }}

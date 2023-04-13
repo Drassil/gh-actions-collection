@@ -30,6 +30,8 @@ jobs:
           package_json_path: ../package.json
           install_command: 'npm ci'
           cache_global_npm_modules: false
+          cache_npm_modules: true
+          cache_command: 'echo "Nothing to do"'
         uses: Drassil/gh-actions-collection/extra-info@master
 
   test-node-setup:
