@@ -47,7 +47,7 @@ runs:
 
         changed_paths=$(echo $changed_paths | tr '\n' ' ')
         echo "CHANGED_PATHS=$changed_paths" >> $GITHUB_ENV
-        echo "Changed paths: ${PATHS[@]}"
+        echo "Changed paths: ${changed_paths[@]}"
         echo "changed_files=$changed_paths" >> $GITHUB_OUTPUT
 
     - name: Required paths check
