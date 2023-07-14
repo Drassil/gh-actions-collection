@@ -84,4 +84,5 @@ runs:
             break
           fi
         done
-        echo "required_paths_matched=$required_path_matched" >> $GITHUB_OUTPUT
+        echo "Setting required_paths_matched as $required_paths_matched"
+        echo "required_paths_matched=$required_paths_matched" >> $GITHUB_OUTPUT
