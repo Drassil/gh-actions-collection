@@ -3,16 +3,16 @@ description: 'Action to check the changed files'
 outputs:
   changed_files:
     description: 'List of changed files'
-    value: ${{ steps.get-changed-paths.outputs.changed_paths }}
+    value: ${{ steps.get-changed-paths.outputs.changed_files }}
   required_paths_matched:
     description: 'If the changed files match the list of required paths'
-    value: ${{ steps.required-path-matched.outputs.required_path_matched }}
+    value: ${{ steps.required-path-matched.outputs.required_paths_matched }}
 inputs:
   access_token:
-    description: ''
+    description: 'Access token to use the gh cli'
     required: true
   required_paths:
-    description: ''
+    description: 'List of required paths separated by a comma using the glob format'
     required: false
 runs:
   using: 'composite'
