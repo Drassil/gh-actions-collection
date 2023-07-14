@@ -31,6 +31,7 @@ runs:
         elif [ "${{ github.event_name }}" == "pull_request" ]; then
           pr_number=$(echo ${{ github.event.pull_request.number }})
         fi
+
         if [ -n "$pr_number" ]; then
           base_ref=$(gh pr view $pr_number --json baseRefName -q '.baseRefName')
           head_ref=$(gh pr view $pr_number --json headRefName -q '.headRefName')
@@ -38,9 +39,12 @@ runs:
           git branch -a
           last_merged_commit=$(git merge-base origin/$base_ref origin/$head_ref)
           changed_paths=$(git diff --name-only $last_merged_commit..origin/$head_ref)
-        else
+        elif [ $(git rev-list --count HEAD) -gt 1 ]; then
           changed_paths=$(git diff --name-only HEAD~1)
+        else
+          echo "No previous commit to compare with."
         fi
+
         changed_paths=$(echo $changed_paths | tr '\n' ' ')
         echo "CHANGED_PATHS=$changed_paths" >> $GITHUB_ENV
         echo "Changed paths: ${PATHS[@]}"
