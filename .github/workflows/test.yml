@@ -55,3 +55,20 @@ jobs:
         with:
           project_id: 'test-node-setup-default'
         uses: ./node-setup
+
+
+  test-changed-files:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Test changed files
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+          required_paths: "**"
+        uses: ./changed-files
+
+      - name: Test changed files without required paths
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+        uses: ./changed-files
