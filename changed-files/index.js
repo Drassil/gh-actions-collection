@@ -81,7 +81,7 @@ async function run() {
 
       console.log("Fetched branches.");
 
-      console.log("Getting merge base...");
+      console.log(`Getting merge base between ${baseRef} and ${headRef}`);
 
       let lastMergedCommit;
       await exec.exec(
