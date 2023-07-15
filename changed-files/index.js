@@ -68,10 +68,6 @@ async function run() {
       );
 
       await exec.exec("git", ["fetch", "origin", baseRef, headRef], {
-        silent: true,
-        env: {
-          GH_TOKEN: accessToken,
-        },
         listeners: {
           stdout: (data) => {
             console.log(data.toString());
