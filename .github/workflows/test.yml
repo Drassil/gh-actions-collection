@@ -57,20 +57,45 @@ jobs:
         uses: ./node-setup
 
 
-  test-changed-files:
-    runs-on: [ubuntu-latest]
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
+test-changed-files:
+  runs-on: [ubuntu-latest]
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
 
-      - name: Test changed files
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-          required_paths: "**"
-        uses: ./changed-files
+    - name: Test changed files
+      id: test-changed-files
+      with:
+        access_token: ${{ secrets.GITHUB_TOKEN }}
+        required_paths: "**"
+      uses: ./changed-files
 
-      - name: Test changed files without required paths
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-        uses: ./changed-files
+    - name: Check outputs
+      run: |
+        if [ -z "${{ steps.test-changed-files.outputs.changed_files }}" ]; then
+          echo "Output changed_files is not set"
+          exit 1
+        fi
+        if [ -z "${{ steps.test-changed-files.outputs.required_paths_matched }}" ]; then
+          echo "Output required_paths_matched is not set"
+          exit 1
+        fi
+
+    - name: Test changed files without required paths
+      id: test-changed-files-without-required-paths
+      with:
+        access_token: ${{ secrets.GITHUB_TOKEN }}
+      uses: ./changed-files
+
+    - name: Check outputs without required paths
+      run: |
+        if [ -z "${{ steps.test-changed-files-without-required-paths.outputs.changed_files }}" ]; then
+          echo "Output changed_files is not set"
+          exit 1
+        fi
+        if [ -z "${{ steps.test-changed-files-without-required-paths.outputs.required_paths_matched }}" ]; then
+          echo "Output required_paths_matched is not set"
+          exit 1
+        fi
+

@@ -1,12 +1,5 @@
 name: 'changed-files'
 description: 'Action to check the changed files'
-outputs:
-  changed_files:
-    description: 'List of changed files'
-    value: ${{ steps.get-changed-paths.outputs.changed_files }}
-  required_paths_matched:
-    description: 'If the changed files match the list of required paths'
-    value: ${{ steps.required-path-matched.outputs.required_paths_matched }}
 inputs:
   access_token:
     description: 'Access token to use the gh cli'
@@ -15,74 +8,5 @@ inputs:
     description: 'List of required paths separated by a comma using the glob format'
     required: false
 runs:
-  using: 'composite'
-  steps:
-    - name: Get changed paths
-      id: get-changed-paths
-      shell: bash
-      env:
-        GH_TOKEN: ${{ inputs.access_token }}
-      run: |
-        # set -x # Uncomment this line for debugging
-        if [ "${{ github.event_name }}" == "issue_comment" ]; then
-          pr_number=$(echo ${{ github.event.issue.number }})
-        elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-          pr_number=$(echo ${{ github.event.inputs.pr_number }})
-        elif [ "${{ github.event_name }}" == "pull_request" ]; then
-          pr_number=$(echo ${{ github.event.pull_request.number }})
-        fi
-
-        if [ -n "$pr_number" ]; then
-          base_ref=$(gh pr view $pr_number --json baseRefName -q '.baseRefName')
-          head_ref=$(gh pr view $pr_number --json headRefName -q '.headRefName')
-          git fetch origin $base_ref $head_ref
-          git branch -a
-          last_merged_commit=$(git merge-base origin/$base_ref origin/$head_ref)
-          changed_paths=$(git diff --name-only $last_merged_commit..origin/$head_ref)
-        elif [ $(git rev-list --count HEAD) -gt 1 ]; then
-          changed_paths=$(git diff --name-only HEAD~1)
-        else
-          echo "No previous commit to compare with."
-        fi
-
-        changed_paths=$(echo $changed_paths | tr '\n' ' ')
-        echo "CHANGED_PATHS=$changed_paths" >> $GITHUB_ENV
-        echo "Changed paths: ${changed_paths[@]}"
-        echo "changed_files=$changed_paths" >> $GITHUB_OUTPUT
-
-    - name: Required paths check
-      id: required-path-matched
-      if: inputs.required_paths
-      shell: bash
-      run: |
-        set -x # Uncomment this line for debugging
-        IFS=' ' read -r -a PATHS <<< "$CHANGED_PATHS"
-        IFS=',' read -r -a required_paths <<< "${{ inputs.required_paths }}"
-
-        echo "Required paths: ${required_paths[@]}"
-
-        required_paths_matched=true
-
-        for required_path in "${required_paths[@]}"; do
-          path_matched=false
-          for path in "${PATHS[@]}"; do
-            echo "Checking if $path matches the required path $required_path"
-            # Convert the GitHub path syntax to a regular expression
-            regex=$(echo "$required_path" | sed 's/\./\\./g' | sed 's/\*\*/.*/g' | sed 's/\*/.*/g' | tr -d '"')
-            echo "Converted $required_path to regex: $regex"
-            # Use grep -P to match the path
-            if echo "$path" | grep -q "^$regex$"; then
-                echo "Path $path matches regex $regex"
-                path_matched=true
-                break
-            else
-              echo "Path $path does not match regex $regex"
-            fi
-          done
-          if [ "$path_matched" = false ]; then
-            required_paths_matched=false
-            break
-          fi
-        done
-        echo "Setting required_paths_matched as $required_paths_matched"
-        echo "required_paths_matched=$required_paths_matched" >> $GITHUB_OUTPUT
+  using: 'node18'
+  main: 'index.js'
