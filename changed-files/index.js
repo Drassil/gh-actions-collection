@@ -67,17 +67,21 @@ async function run() {
         }
       );
 
-      await exec.exec("git", ["fetch", "origin", baseRef, headRef], {
-        silent: true,
-        listeners: {
-          stdout: (data) => {
-            console.log(data.toString());
+      await exec.exec(
+        "git",
+        ["fetch", "origin", baseRef + ":" + baseRef, headRef + ":" + headRef],
+        {
+          silent: true,
+          listeners: {
+            stdout: (data) => {
+              console.log(data.toString());
+            },
+            stderr: (data) => {
+              console.error(data.toString());
+            },
           },
-          stderr: (data) => {
-            console.error(data.toString());
-          },
-        },
-      });
+        }
+      );
 
       console.log("Fetched branches.");
 
