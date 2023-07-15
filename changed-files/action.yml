@@ -1,12 +1,18 @@
-name: 'changed-files'
-description: 'Action to check the changed files'
+name: "changed-files"
+description: "Action to check the changed files"
 inputs:
   access_token:
-    description: 'Access token to use the gh cli'
+    description: "Access token to use the gh cli"
     required: true
   required_paths:
-    description: 'List of required paths separated by a comma using the glob format'
+    description: "List of required paths separated by a comma using the glob format"
     required: false
+outputs:
+  changed_files:
+    description: "List of changed files"
+  required_paths_matched:
+    description: "If the changed files match the list of required paths"
 runs:
-  using: 'node16'
-  main: 'index.js'
+  using: "node16"
+  id: get-changed-paths
+  main: "index.js"
