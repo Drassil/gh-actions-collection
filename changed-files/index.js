@@ -77,6 +77,9 @@ async function run() {
             stdout: (data) => {
               lastMergedCommit = data.toString().trim();
             },
+            stderr: (data) => {
+              console.error(data.toString());
+            },
           },
         }
       );
@@ -90,6 +93,9 @@ async function run() {
             stdout: (data) => {
               changedPaths = data.toString().split("\n");
             },
+            stderr: (data) => {
+              console.error(data.toString());
+            },
           },
         }
       );
@@ -99,6 +105,9 @@ async function run() {
         listeners: {
           stdout: (data) => {
             changedPaths = data.toString().split("\n");
+          },
+          stderr: (data) => {
+            console.error(data.toString());
           },
         },
       });
