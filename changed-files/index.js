@@ -79,6 +79,10 @@ async function run() {
         },
       });
 
+      console.log("Fetched branches.");
+
+      console.log("Getting merge base...");
+
       let lastMergedCommit;
       await exec.exec(
         "git",
