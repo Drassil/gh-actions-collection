@@ -58,6 +58,9 @@ async function run() {
               baseRef = prData.baseRefName;
               headRef = prData.headRefName;
             },
+            stderr: (data) => {
+              console.error(data.toString());
+            },
           },
         }
       );
