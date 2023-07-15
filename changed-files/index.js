@@ -92,6 +92,7 @@ async function run() {
           ignoreReturnCode: true,
           listeners: {
             stdout: (data) => {
+              console.log(`Last merged commit: ${data}`);
               lastMergedCommit = data.toString().trim();
             },
             stderr: (data) => {
