@@ -68,6 +68,7 @@ async function run() {
       );
 
       await exec.exec("git", ["fetch", "--force", "origin", baseRef, headRef], {
+        silent: true,
         listeners: {
           stdout: (data) => {
             console.log(data.toString());
