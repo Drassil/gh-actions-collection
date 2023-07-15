@@ -88,7 +88,7 @@ async function run() {
         "git",
         ["merge-base", `origin/${baseRef}`, `origin/${headRef}`],
         {
-          silent: true,
+          // silent: true,
           listeners: {
             stdout: (data) => {
               lastMergedCommit = data.toString().trim();
