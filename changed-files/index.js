@@ -2,21 +2,17 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const exec = require("@actions/exec");
 const glob = require("glob");
-// const prepare = require("../src/prepare");
 
 async function run() {
   try {
-    // await prepare();
     const accessToken = core.getInput("access_token");
     const requiredPathsInput = core.getInput("required_paths");
     const requiredPaths = requiredPathsInput
       ? requiredPathsInput.split(",")
       : [];
 
-    // Set the access token for the GitHub CLI
     process.env.GH_TOKEN = accessToken;
 
-    // Get the PR number
     let prNumber;
     switch (github.context.eventName) {
       case "issue_comment":
@@ -30,10 +26,8 @@ async function run() {
         break;
     }
 
-    // Get the changed paths
     let changedPaths;
     if (prNumber) {
-      // Fetch the base and head refs
       let baseRef, headRef;
       await exec.exec(
         "gh",
@@ -50,10 +44,8 @@ async function run() {
         }
       );
 
-      // Fetch the branches
       await exec.exec("git", ["fetch", "origin", baseRef, headRef]);
 
-      // Get the last merged commit
       let lastMergedCommit;
       await exec.exec(
         "git",
@@ -68,7 +60,6 @@ async function run() {
         }
       );
 
-      // Get the changed paths
       await exec.exec(
         "git",
         ["diff", "--name-only", `${lastMergedCommit}..origin/${headRef}`],
@@ -82,7 +73,6 @@ async function run() {
         }
       );
     } else {
-      // Get the changed paths from the last commit
       await exec.exec("git", ["diff", "--name-only", "HEAD~1"], {
         silent: true,
         listeners: {
@@ -93,7 +83,6 @@ async function run() {
       });
     }
 
-    // Check if the changed paths match the required paths
     let requiredPathsMatched = true;
     for (const requiredPath of requiredPaths) {
       const matchedPaths = glob.sync(requiredPath, {
@@ -109,9 +98,15 @@ async function run() {
       }
     }
 
-    // Set the outputs
     core.setOutput("changed_files", changedPaths.join(","));
     core.setOutput("required_paths_matched", requiredPathsMatched.toString());
+
+    // Set the outputs as environment variables
+    core.exportVariable("CHANGED_FILES", changedPaths.join(","));
+    core.exportVariable(
+      "REQUIRED_PATHS_MATCHED",
+      requiredPathsMatched.toString()
+    );
   } catch (error) {
     core.setFailed(error.message);
   }
