@@ -8,5 +8,5 @@ inputs:
     description: 'List of required paths separated by a comma using the glob format'
     required: false
 runs:
-  using: 'node18'
+  using: 'node16'
   main: 'index.js'
