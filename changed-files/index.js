@@ -2,6 +2,7 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const exec = require("@actions/exec");
 const glob = require("glob");
+const { execSync } = require("child_process");
 
 async function run() {
   try {
@@ -84,23 +85,15 @@ async function run() {
       console.log(`Getting merge base between ${baseRef} and ${headRef}`);
 
       let lastMergedCommit;
-      await exec.exec(
-        "git",
-        ["merge-base", `origin/${baseRef}`, `origin/${headRef}`],
-        {
-          silent: true,
-          ignoreReturnCode: true,
-          listeners: {
-            stdout: (data) => {
-              console.log(`Last merged commit: ${data}`);
-              lastMergedCommit = data.toString().trim();
-            },
-            stderr: (data) => {
-              console.error(data.toString());
-            },
-          },
-        }
-      );
+      try {
+        const stdout = execSync(
+          `git merge-base origin/${baseRef} origin/${headRef}`
+        ).toString();
+        console.log(`Last merged commit: ${stdout}`);
+        lastMergedCommit = stdout.trim();
+      } catch (error) {
+        console.error(`exec error: ${error}`);
+      }
 
       await exec.exec(
         "git",
