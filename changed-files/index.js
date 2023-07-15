@@ -36,6 +36,8 @@ async function run() {
     let changedPaths;
     if (prNumber) {
       let baseRef, headRef;
+
+      let repo = `${github.context.repo.owner}/${github.context.repo.repo}`;
       await exec.exec(
         "gh",
         [
@@ -43,7 +45,7 @@ async function run() {
           "view",
           prNumber,
           "--repo",
-          github.context.repo,
+          repo,
           "--json",
           "baseRefName,headRefName",
         ],
