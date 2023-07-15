@@ -38,9 +38,20 @@ async function run() {
       let baseRef, headRef;
       await exec.exec(
         "gh",
-        ["pr", "view", prNumber, "--json", "baseRefName,headRefName"],
+        [
+          "pr",
+          "view",
+          prNumber,
+          "--repo",
+          github.context.repo,
+          "--json",
+          "baseRefName,headRefName",
+        ],
         {
           silent: true,
+          env: {
+            GH_TOKEN: accessToken,
+          },
           listeners: {
             stdout: (data) => {
               const prData = JSON.parse(data.toString());
