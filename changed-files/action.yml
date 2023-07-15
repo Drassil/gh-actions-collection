@@ -14,5 +14,4 @@ outputs:
     description: "If the changed files match the list of required paths"
 runs:
   using: "node16"
-  id: get-changed-paths
   main: "index.js"
