@@ -69,7 +69,13 @@ async function run() {
 
       await exec.exec(
         "git",
-        ["fetch", "origin", baseRef + ":" + baseRef, headRef + ":" + headRef],
+        [
+          "fetch",
+          "--unshallow",
+          "origin",
+          baseRef + ":" + baseRef,
+          headRef + ":" + headRef,
+        ],
         {
           silent: true,
           listeners: {
