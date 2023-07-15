@@ -5,8 +5,15 @@ const glob = require("glob");
 
 async function run() {
   try {
-    const accessToken = core.getInput("access_token");
-    const requiredPathsInput = core.getInput("required_paths");
+    let accessToken = core.getInput("access_token");
+    if (!accessToken) {
+      accessToken = process.env.ACCESS_TOKEN;
+    }
+
+    let requiredPathsInput = core.getInput("required_paths");
+    if (!requiredPathsInput) {
+      requiredPathsInput = process.env.REQUIRED_PATHS;
+    }
     const requiredPaths = requiredPathsInput
       ? requiredPathsInput.split(",")
       : [];
