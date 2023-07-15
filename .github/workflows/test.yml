@@ -16,7 +16,7 @@ jobs:
         with:
           npm_version: ${{ env.NPM_VERSION }}
           node_version: ${{ env.NODE_VERSION }}
-          install_command: 'npm ci'
+          install_command: "npm ci"
           cache_global_npm_modules: false
         uses: ./extra-info
 
@@ -28,7 +28,7 @@ jobs:
           npm_version: ${{ env.NPM_VERSION }}
           node_version: ${{ env.NODE_VERSION }}
           package_json_path: ../package.json
-          install_command: 'npm ci'
+          install_command: "npm ci"
           cache_global_npm_modules: false
           cache_npm_modules: true
           cache_command: 'echo "Nothing to do"'
@@ -42,60 +42,58 @@ jobs:
         with:
           npm_version: ${{ env.NPM_VERSION }}
           node_version: ${{ env.NODE_VERSION }}
-          project_id: 'test-node-setup'
-          install_command: 'npm install'
+          project_id: "test-node-setup"
+          install_command: "npm install"
           cache_npm_modules: true
         uses: ./node-setup
-  
+
   test-node-setup-default-values:
     runs-on: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v3
       - name: Test node-setup action
         with:
-          project_id: 'test-node-setup-default'
+          project_id: "test-node-setup-default"
         uses: ./node-setup
 
+  test-changed-files:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
 
-test-changed-files:
-  runs-on: [ubuntu-latest]
-  steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 2
+      - name: Test changed files
+        id: test-changed-files
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+          required_paths: "**"
+        uses: ./changed-files
 
-    - name: Test changed files
-      id: test-changed-files
-      with:
-        access_token: ${{ secrets.GITHUB_TOKEN }}
-        required_paths: "**"
-      uses: ./changed-files
+      - name: Check outputs
+        run: |
+          if [ -z "${{ steps.test-changed-files.outputs.changed_files }}" ]; then
+            echo "Output changed_files is not set"
+            exit 1
+          fi
+          if [ -z "${{ steps.test-changed-files.outputs.required_paths_matched }}" ]; then
+            echo "Output required_paths_matched is not set"
+            exit 1
+          fi
 
-    - name: Check outputs
-      run: |
-        if [ -z "${{ steps.test-changed-files.outputs.changed_files }}" ]; then
-          echo "Output changed_files is not set"
-          exit 1
-        fi
-        if [ -z "${{ steps.test-changed-files.outputs.required_paths_matched }}" ]; then
-          echo "Output required_paths_matched is not set"
-          exit 1
-        fi
+      - name: Test changed files without required paths
+        id: test-changed-files-without-required-paths
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+        uses: ./changed-files
 
-    - name: Test changed files without required paths
-      id: test-changed-files-without-required-paths
-      with:
-        access_token: ${{ secrets.GITHUB_TOKEN }}
-      uses: ./changed-files
-
-    - name: Check outputs without required paths
-      run: |
-        if [ -z "${{ steps.test-changed-files-without-required-paths.outputs.changed_files }}" ]; then
-          echo "Output changed_files is not set"
-          exit 1
-        fi
-        if [ -z "${{ steps.test-changed-files-without-required-paths.outputs.required_paths_matched }}" ]; then
-          echo "Output required_paths_matched is not set"
-          exit 1
-        fi
-
+      - name: Check outputs without required paths
+        run: |
+          if [ -z "${{ steps.test-changed-files-without-required-paths.outputs.changed_files }}" ]; then
+            echo "Output changed_files is not set"
+            exit 1
+          fi
+          if [ -z "${{ steps.test-changed-files-without-required-paths.outputs.required_paths_matched }}" ]; then
+            echo "Output required_paths_matched is not set"
+            exit 1
+          fi
