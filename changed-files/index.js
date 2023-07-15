@@ -98,6 +98,9 @@ async function run() {
       }
     }
 
+    console.log("Changed files", changedPaths);
+    console.log("Required paths matched", requiredPathsMatched);
+
     core.setOutput("changed_files", changedPaths.join(","));
     core.setOutput("required_paths_matched", requiredPathsMatched.toString());
 
