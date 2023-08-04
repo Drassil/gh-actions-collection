@@ -14,7 +14,7 @@ async function run() {
     if (!requiredPathsInput) {
       requiredPathsInput = process.env.REQUIRED_PATHS;
     }
-    const requiredPaths = requiredPathsInput
+    let requiredPaths = requiredPathsInput
       ? requiredPathsInput.split(",")
       : [];
 
