@@ -143,10 +143,10 @@ async function run() {
 
     changedPaths = changedPaths.filter(path => path.trim() !== '');
 
-    let requiredPathsMatched = true;
+    let requiredPathsMatched = false;
     for (const requiredPath of requiredPaths) {
-      if (!changedPaths.some(changedPath => minimatch(changedPath, requiredPath, { matchBase: false, dot: true, nocase: true }))) {
-        requiredPathsMatched = false;
+      if (changedPaths.some(changedPath => minimatch(changedPath, requiredPath, { matchBase: true, dot: true }))) {
+        requiredPathsMatched = true;
         break;
       }
     }
