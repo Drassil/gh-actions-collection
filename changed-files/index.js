@@ -18,6 +18,8 @@ async function run() {
       ? requiredPathsInput.split(",")
       : [];
 
+    requiredPaths = requiredPaths.map(path => path.replace(/\n/g, '').trim());
+
     process.env.GH_TOKEN = accessToken;
 
     let prNumber;
@@ -138,6 +140,8 @@ async function run() {
         },
       });
     }
+
+    changedPaths = changedPaths.filter(path => path.trim() !== '');
 
     let requiredPathsMatched = true;
     for (const requiredPath of requiredPaths) {
