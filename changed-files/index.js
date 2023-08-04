@@ -145,7 +145,7 @@ async function run() {
 
     let requiredPathsMatched = true;
     for (const requiredPath of requiredPaths) {
-      if (!changedPaths.some(changedPath => minimatch(changedPath, requiredPath, { matchBase: true, dot: true, nocase: true }))) {
+      if (!changedPaths.some(changedPath => minimatch(changedPath, requiredPath, { matchBase: false, dot: true, nocase: true }))) {
         requiredPathsMatched = false;
         break;
       }
