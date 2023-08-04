@@ -1,7 +1,6 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const exec = require("@actions/exec");
-const glob = require("glob");
 const minimatch = require("minimatch");
 
 async function run() {
