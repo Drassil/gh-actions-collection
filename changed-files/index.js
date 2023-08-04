@@ -2,6 +2,7 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const exec = require("@actions/exec");
 const glob = require("glob");
+const minimatch = require("minimatch");
 
 async function run() {
   try {
@@ -145,14 +146,7 @@ async function run() {
 
     let requiredPathsMatched = true;
     for (const requiredPath of requiredPaths) {
-      const matchedPaths = glob.sync(requiredPath, {
-        matchBase: true,
-        dot: true,
-        nocase: true,
-      });
-      if (
-        !matchedPaths.some((matchedPath) => changedPaths.includes(matchedPath))
-      ) {
+      if (!changedPaths.some(changedPath => minimatch(changedPath, requiredPath, { matchBase: true, dot: true, nocase: true }))) {
         requiredPathsMatched = false;
         break;
       }
