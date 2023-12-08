@@ -5,8 +5,8 @@ on:
     branches:
       - master
 env:
-  NODE_VERSION: 18
-  NPM_VERSION: 8
+  NODE_VERSION: 20
+  NPM_VERSION: 10
 jobs:
   test-extra-info-local-usage:
     runs-on: [ubuntu-latest]
