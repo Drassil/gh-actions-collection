@@ -27,6 +27,7 @@ runs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ inputs.node_version }}
+
     - name: Prepare
       shell: bash
       id: prepare
@@ -37,3 +38,10 @@ runs:
         INPUT_PACKAGE_JSON_PATH: ${{ inputs.package_json_path }}
       run: |
         node "${{ github.action_path }}/index.js"
+
+    - name: Check versions
+      run: |
+        echo "NodeJS version:"
+        node --version
+        echo "NPM version:"
+        npm --version
