@@ -40,6 +40,7 @@ runs:
         node "${{ github.action_path }}/index.js"
 
     - name: Check versions
+      shell: bash
       run: |
         echo "NodeJS version:"
         node --version
