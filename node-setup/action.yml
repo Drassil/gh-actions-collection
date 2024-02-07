@@ -58,7 +58,7 @@ runs:
         package_json_path: ${{ env.NODE_MODULE_DIR }}/${{ inputs.package_json_file }}
 
     - name: Cache global npm
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       if: ( inputs.cache_global_npm_modules )
       env:
         cache-name: cache-${{ inputs.project_id }}-global-node-modules
@@ -73,7 +73,7 @@ runs:
           ${{ runner.os }}-
 
     - name: Cache local node_modules
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       if: ( inputs.cache_npm_modules )
       id: local-cache
       env:
