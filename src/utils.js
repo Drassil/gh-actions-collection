@@ -1,7 +1,6 @@
 const child_process = require('child_process');
 const exec = require('@actions/exec');
 const semver = require('semver');
-const { env } = require('./defs');
 const core = require('@actions/core');
 const cwd = process.env.GITHUB_WORKSPACE;
 
@@ -17,7 +16,7 @@ async function npmVersionCheck() {
     },
   };
   const npmVersionTest1 = child_process
-    .execSync('npm --version', { cwd, env })
+    .execSync('npm --version', { cwd })
     .toString()
     .trim();
   await exec.exec('npm --version', [], options);
