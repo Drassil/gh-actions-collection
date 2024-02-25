@@ -57,6 +57,11 @@ runs:
         node_version: ${{ inputs.node_version }}
         package_json_path: ${{ env.NODE_MODULE_DIR }}/${{ inputs.package_json_file }}
 
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
     - name: Cache global npm
       uses: actions/cache@v4
       if: ( inputs.cache_global_npm_modules )
@@ -64,8 +69,7 @@ runs:
         cache-name: cache-${{ inputs.project_id }}-global-node-modules
         NODE_MODULE_DIR: ${{ inputs.package_json_dir || github.workspace }}
       with:
-        # npm cache files are stored in `~/.npm` on Linux/macOS
-        path: ~/.npm
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(format('{0}/package-lock.json', env.NODE_MODULE_DIR )) }}
         restore-keys: |
           ${{ runner.os }}-build-${{ env.cache-name }}-
