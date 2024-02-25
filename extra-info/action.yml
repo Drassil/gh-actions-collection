@@ -46,3 +46,8 @@ runs:
         node --version
         echo "NPM version:"
         npm --version
+        echo "NPM Config: "
+        npm config list -l
+
+    # - name: Set npm prefix
+    #   run: npm config set prefix '/home/runner/.npm'
