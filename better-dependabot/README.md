@@ -22,6 +22,8 @@ The Better Dependabot GitHub Action automates the process of updating NPM packag
 | `token`        | A GitHub PAT (Personal Access Token) for authenticating GitHub CLI operations.                        | Yes      | N/A     |
 | `target_branch` | The target branch for the PR                        | No      | `main`     |
 | `context` | It is used inside the branch name. E.g: You can use it to differentiate multiple PRs in a monorepo          | No      | `default`     |
+| `audit_command` | Audit command to use                                                                                   | No     | `npm audit --package-lock-only` fix |
+| `package_manager` | package manager to use                                                                                | No | `npm` |
 
 
 ## Usage

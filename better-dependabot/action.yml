@@ -27,6 +27,14 @@ inputs:
     description: 'The PR target branch'
     default: 'main'
     required: false
+  audit_command:
+    description: 'Audit command to use. Default: npm audit --package-lock-only fix'
+    default: 'npm audit --package-lock-only fix'
+    required: false
+  package_manager:
+    description: 'Package manager to use. Default: npm'
+    default: 'npm'
+    required: false
 runs:
   using: 'composite'
   steps:
@@ -60,22 +68,22 @@ runs:
     - name: Check npm updates
       if: steps.check_pr.outputs.pr_exists == '0'
       shell: bash
-      run: ncu --target ${{ inputs.version_target }} ${{ inputs.ncu_args }}
+      run: ncu --packageManager ${{ inputs.package_manager }} --target ${{ inputs.version_target }} ${{ inputs.ncu_args }}
 
     - name: Update package.json
       if: steps.check_pr.outputs.pr_exists == '0'
       shell: bash
-      run: ncu -u --target ${{ inputs.version_target }} ${{ inputs.ncu_args }}
+      run: ncu -u --packageManager ${{ inputs.package_manager }} --target ${{ inputs.version_target }} ${{ inputs.ncu_args }}
 
     - name: Install updated packages
       if: steps.check_pr.outputs.pr_exists == '0'
       shell: bash
-      run: npm install --package-lock-only
+      run: ${{ inputs.package_manager }} install --package-lock-only
 
     - name: Audit fix
       if: steps.check_pr.outputs.pr_exists == '0'
       shell: bash
-      run: npm audit --package-lock-only fix
+      run: ${{ inputs.audit_command }}
 
     - name: Check for Changes
       if: steps.check_pr.outputs.pr_exists == '0'
