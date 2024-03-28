@@ -95,7 +95,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       if: steps.check_pr.outputs.pr_exists == '0'
       shell: bash
-      run: ${{ inputs.audit_command }}
+      run: ${{ inputs.audit_command }} || true
 
     - name: Check for Changes
       working-directory: ${{ inputs.working_directory }}
