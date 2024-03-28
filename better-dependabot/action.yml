@@ -124,10 +124,7 @@ runs:
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git add --all
         git commit -m "Update dependencies"
-        # Construct the repository URL with the token for authentication
-        REPO_URL_WITH_TOKEN=$(echo "${{ github.server_url }}/${{ github.repository }}" | sed -e "s|https://|https://x-access-token:${{ inputs.token }}@|")
-        # Now push using the authenticated URL
-        git push $REPO_URL_WITH_TOKEN $BRANCH_NAME
+        git push https://${{ inputs.token }}@github.com/${{ github.repository }} $BRANCH_NAME
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
