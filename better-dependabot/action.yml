@@ -39,6 +39,10 @@ inputs:
     description: 'Comma-separated list of labels to apply to the pull request'
     required: false
     default: ''
+  working_directory:
+    description: 'Change the working directory for the action'
+    required: false
+    default: ''
 runs:
   using: 'composite'
   steps:
@@ -70,26 +74,31 @@ runs:
       run: npm install -g npm-check-updates
 
     - name: Check npm updates
+      working-directory: ${{ inputs.working_directory }}
       if: steps.check_pr.outputs.pr_exists == '0'
       shell: bash
       run: ncu --packageManager ${{ inputs.package_manager }} --target ${{ inputs.version_target }} ${{ inputs.ncu_args }}
 
     - name: Update package.json
+      working-directory: ${{ inputs.working_directory }}
       if: steps.check_pr.outputs.pr_exists == '0'
       shell: bash
       run: ncu -u --packageManager ${{ inputs.package_manager }} --target ${{ inputs.version_target }} ${{ inputs.ncu_args }}
 
     - name: Install updated packages
+      working-directory: ${{ inputs.working_directory }}
       if: steps.check_pr.outputs.pr_exists == '0'
       shell: bash
       run: ${{ inputs.package_manager }} install --package-lock-only
 
     - name: Audit fix
+      working-directory: ${{ inputs.working_directory }}
       if: steps.check_pr.outputs.pr_exists == '0'
       shell: bash
       run: ${{ inputs.audit_command }}
 
     - name: Check for Changes
+      working-directory: ${{ inputs.working_directory }}
       if: steps.check_pr.outputs.pr_exists == '0'
       id: check_changes
       run: |
@@ -101,12 +110,14 @@ runs:
       shell: bash
 
     - name: Create a new branch
+      working-directory: ${{ inputs.working_directory }}
       if: steps.check_pr.outputs.pr_exists == '0' && env.NO_CHANGES == 'false'
       run: |
         git checkout -b $BRANCH_NAME
       shell: bash
 
     - name: Commit changes
+      working-directory: ${{ inputs.working_directory }}
       if: steps.check_pr.outputs.pr_exists == '0' && env.NO_CHANGES == 'false'
       run: |
         git config --global user.name 'github-actions[bot]'
@@ -119,6 +130,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.token }}
 
     - name: Create Pull Request
+      working-directory: ${{ inputs.working_directory }}
       if: steps.check_pr.outputs.pr_exists == '0' && env.NO_CHANGES == 'false'
       run: |
         LABELS="${{ inputs.labels }}"
