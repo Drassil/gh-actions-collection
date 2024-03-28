@@ -20,6 +20,10 @@ inputs:
   token:
     description: 'A Github PAT'
     required: true
+  target_branch:
+    description: 'The PR target branch'
+    default: 'main'
+    required: false
 runs:
   using: 'composite'
   steps:

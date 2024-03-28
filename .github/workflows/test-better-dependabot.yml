@@ -14,3 +14,4 @@ jobs:
         with:
           version_target: 'patch' # Example: target minor version updates
           token: ${{ secrets.GITHUB_TOKEN }} # Use a GitHub PAT or `${{ secrets.GITHUB_TOKEN }}`
+          target_branch: 'master'

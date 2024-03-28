@@ -20,6 +20,7 @@ The Better Dependabot GitHub Action automates the process of updating NPM packag
 | `version_target` | Determines the version to upgrade to. Options: `latest`, `newest`, `greatest`, `minor`, `patch`, `semver`. | No       | `patch` |
 | `ncu_args`     | Extra arguments for the `npm-check-updates` command.                                                  | No       | `''`    |
 | `token`        | A GitHub PAT (Personal Access Token) for authenticating GitHub CLI operations.                        | Yes      | N/A     |
+| `target_branch` | The target branch for the PR                        | No      | `main`     |
 
 ## Usage
 
@@ -48,6 +49,7 @@ jobs:
           version_target: 'minor' # Example: target minor version updates
           ncu_args: '--filter /react/' # Example: update react packages only
           token: ${{ secrets.GITHUB_TOKEN }} # Use a GitHub PAT or `${{ secrets.GITHUB_TOKEN }}`
+          target_branch: 'main'
 ```
 
 ## Example Workflow
