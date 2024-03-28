@@ -21,6 +21,8 @@ The Better Dependabot GitHub Action automates the process of updating NPM packag
 | `ncu_args`     | Extra arguments for the `npm-check-updates` command.                                                  | No       | `''`    |
 | `token`        | A GitHub PAT (Personal Access Token) for authenticating GitHub CLI operations.                        | Yes      | N/A     |
 | `target_branch` | The target branch for the PR                        | No      | `main`     |
+| `context` | It is used inside the branch name. E.g: You can use it to differentiate multiple PRs in a monorepo          | No      | `default`     |
+
 
 ## Usage
 
