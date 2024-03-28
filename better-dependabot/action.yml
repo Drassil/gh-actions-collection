@@ -13,6 +13,9 @@ inputs:
     description: 'Determines the version to upgrade to: latest, newest, greatest, minor, patch, semver. (default: patch)'
     required: false
     default: 'patch'
+  context:
+    description: 'It is used inside the branch name. E.g: You can use it to differentiate multiple PRs in a monorepo'
+    default: 'default'
   ncu_args:
     descriptions: 'Extra args for the npm-check-updates'
     required: false
@@ -31,7 +34,7 @@ runs:
     - name: Check for Existing Pull Requests
       id: check_pr
       run: |
-        BRANCH_PREFIX="better-dependabot-updates-${{ inputs.version_target }}"
+        BRANCH_PREFIX="better-dependabot-updates-${{ inputs.context }}-${{ inputs.version_target }}"
         BRANCH_NAME=$BRANCH_PREFIX-$(date +%Y%m%d%H%M%S)
         PR_EXISTS=$(gh pr list --search "head:${BRANCH_PREFIX} type:pr state:open" | wc -l)
         echo "PR_EXISTS=${PR_EXISTS}" >> $GITHUB_ENV
