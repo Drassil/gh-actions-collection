@@ -42,6 +42,8 @@ jobs:
   update-dependencies:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Better Dependabot
         uses: Drassil/gh-actions-collection/better-dependabot@master
         with:
