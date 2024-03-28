@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '0 0 * * 0' # Weekly on Sunday at 00:00
   workflow_dispatch: # Allows manual triggering
+  push:
+    branches:
+      - master
 
 jobs:
   update-dependencies:
