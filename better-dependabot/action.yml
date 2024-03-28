@@ -128,6 +128,7 @@ runs:
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
+        GH_TOKEN: ${{ inputs.token }}
 
     - name: Create Pull Request
       working-directory: ${{ inputs.working_directory }}
@@ -142,4 +143,5 @@ runs:
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
+        GH_TOKEN: ${{ inputs.token }}
 
