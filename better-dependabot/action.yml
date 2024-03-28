@@ -36,7 +36,7 @@ runs:
         PR_EXISTS=$(gh pr list --search "head:${BRANCH_PREFIX} type:pr state:open" | wc -l)
         echo "PR_EXISTS=${PR_EXISTS}" >> $GITHUB_ENV
         echo "BRANCH_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
-        echo "::set-output name=pr_exists::${PR_EXISTS}"
+        echo "pr_exists=${PR_EXISTS}" >> $GITHUB_OUTPUT
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
@@ -91,7 +91,7 @@ runs:
     - name: Create Pull Request
       if: steps.check_pr.outputs.pr_exists == '0'
       run: |
-        gh pr create --title "Better Dependabot: Update ${{ inputs.version_target }} dependencies" --body "This PR updates dependencies to the most recent ${{ inputs.version_target }} versions." --head $BRANCH_NAME --base main
+        gh pr create --title "Better Dependabot: Update ${{ inputs.version_target }} dependencies" --body "This PR updates dependencies to the most recent ${{ inputs.version_target }} versions." --head $BRANCH_NAME --base ${{ inputs.target_branch }}
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
