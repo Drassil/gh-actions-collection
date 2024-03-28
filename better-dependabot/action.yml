@@ -72,6 +72,11 @@ runs:
       shell: bash
       run: npm install --package-lock-only
 
+    - name: Audit fix
+      if: steps.check_pr.outputs.pr_exists == '0'
+      shell: bash
+      run: npm audit --package-lock-only fix
+
     - name: Check for Changes
       if: steps.check_pr.outputs.pr_exists == '0'
       id: check_changes
