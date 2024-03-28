@@ -69,15 +69,25 @@ runs:
       shell: bash
       run: npm install --package-lock-only
 
-    - name: Create a new branch
+    - name: Check for Changes
       if: steps.check_pr.outputs.pr_exists == '0'
+      id: check_changes
+      run: |
+        if git diff --quiet && git diff --staged --quiet; then
+          echo "NO_CHANGES=true" >> $GITHUB_ENV
+        else
+          echo "NO_CHANGES=false" >> $GITHUB_ENV
+        fi
+      shell: bash
+
+    - name: Create a new branch
+      if: steps.check_pr.outputs.pr_exists == '0' && env.NO_CHANGES == 'false'
       run: |
         git checkout -b $BRANCH_NAME
       shell: bash
 
-    # Placeholder for committing changes - customize as necessary
     - name: Commit changes
-      if: steps.check_pr.outputs.pr_exists == '0'
+      if: steps.check_pr.outputs.pr_exists == '0' && env.NO_CHANGES == 'false'
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -89,7 +99,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.token }}
 
     - name: Create Pull Request
-      if: steps.check_pr.outputs.pr_exists == '0'
+      if: steps.check_pr.outputs.pr_exists == '0' && env.NO_CHANGES == 'false'
       run: |
         gh pr create --title "Better Dependabot: Update ${{ inputs.version_target }} dependencies" --body "This PR updates dependencies to the most recent ${{ inputs.version_target }} versions." --head $BRANCH_NAME --base ${{ inputs.target_branch }}
       shell: bash
