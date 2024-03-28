@@ -126,10 +126,8 @@ runs:
         git commit -m "Update dependencies"
         # Construct the repository URL with the token for authentication
         REPO_URL_WITH_TOKEN=$(echo "${{ github.server_url }}/${{ github.repository }}" | sed -e "s|https://|https://x-access-token:${{ inputs.token }}@|")
-        # Set the remote with the authenticated URL
-        git remote set-url origin $REPO_URL_WITH_TOKEN
         # Now push using the authenticated URL
-        git push --set-upstream origin $BRANCH_NAME
+        git push $REPO_URL_WITH_TOKEN $BRANCH_NAME
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
