@@ -24,6 +24,7 @@ The Better Dependabot GitHub Action automates the process of updating NPM packag
 | `context` | It is used inside the branch name. E.g: You can use it to differentiate multiple PRs in a monorepo          | No      | `default`     |
 | `audit_command` | Audit command to use                                                                                   | No     | `npm audit --package-lock-only` fix |
 | `package_manager` | package manager to use                                                                                | No | `npm` |
+| `working_directory` | Change the working directory of the action                                                           | No | `` |
 
 
 ## Usage
