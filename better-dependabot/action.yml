@@ -35,6 +35,10 @@ inputs:
     description: 'Package manager to use. Default: npm'
     default: 'npm'
     required: false
+  labels:
+    description: 'Comma-separated list of labels to apply to the pull request'
+    required: false
+    default: ''
 runs:
   using: 'composite'
   steps:
@@ -117,7 +121,12 @@ runs:
     - name: Create Pull Request
       if: steps.check_pr.outputs.pr_exists == '0' && env.NO_CHANGES == 'false'
       run: |
-        gh pr create --title "Better Dependabot: Update ${{ inputs.version_target }} dependencies" --body "This PR updates dependencies to the most recent ${{ inputs.version_target }} versions." --head $BRANCH_NAME --base ${{ inputs.target_branch }}
+        LABELS="${{ inputs.labels }}"
+        if [ -z "$LABELS" ]; then
+          gh pr create --title "Better Dependabot: Update ${{ inputs.context }} ${{ inputs.version_target }} dependencies" --body "This PR updates dependencies to the most recent ${{ inputs.version_target }} versions." --head $BRANCH_NAME --base ${{ inputs.target_branch }}
+        else
+          gh pr create --title "Better Dependabot: Update ${{ inputs.context }} ${{ inputs.version_target }} dependencies" --body "This PR updates dependencies to the most recent ${{ inputs.version_target }} versions." --head $BRANCH_NAME --base ${{ inputs.target_branch }} --label "$LABELS"
+        fi
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
