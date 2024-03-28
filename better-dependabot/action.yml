@@ -60,6 +60,13 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
 
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.target_branch }}
+        repository: ${{ github.repository }}
+        fetch-depth: 0
+        token: ${{ inputs.token || github.token }}
+
     - name: Install node
       if: steps.check_pr.outputs.pr_exists == '0'
       uses: Drassil/gh-actions-collection/extra-info@master
