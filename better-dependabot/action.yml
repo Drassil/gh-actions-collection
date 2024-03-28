@@ -29,7 +29,7 @@ inputs:
     required: false
   audit_command:
     description: 'Audit command to use. Default: npm audit --package-lock-only fix'
-    default: 'npm audit --package-lock-only fix'
+    default: 'npm audit --package-lock-only --ignore-scripts fix'
     required: false
   package_manager:
     description: 'Package manager to use. Default: npm'
@@ -89,7 +89,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       if: steps.check_pr.outputs.pr_exists == '0'
       shell: bash
-      run: ${{ inputs.package_manager }} install --package-lock-only
+      run: ${{ inputs.package_manager }} install --package-lock-only  --ignore-scripts
 
     - name: Audit fix
       working-directory: ${{ inputs.working_directory }}
